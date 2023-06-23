@@ -1,6 +1,6 @@
-package com.usach.mingeso.repositories;
+package com.usach.collectionservice.repositories;
 
-import com.usach.mingeso.entities.CollectionEntity;
+import com.usach.collectionservice.entities.CollectionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,19 +1,13 @@
-package com.usach.greaseandsolidservice.entities;
+package com.usach.payservice.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "greaseAndSolids")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GreaseAndSolidEntity {
-    @Id
-    @Column(nullable=false, length = 5)
+public class GreaseAndSolidModel {
     private String code;
     private Double grease;
     private Double solid;

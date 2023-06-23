@@ -1,13 +1,16 @@
-package com.usach.mingeso.services;
+package com.usach.registerservice.services;
 
-import com.usach.mingeso.entities.CollectionEntity;
-import com.usach.mingeso.entities.RegisterEntity;
-import com.usach.mingeso.repositories.RegisterRepository;
+import com.usach.registerservice.entities.RegisterEntity;
+import com.usach.registerservice.models.CollectionModel;
+import com.usach.registerservice.models.GreaseAndSolidModel;
+import com.usach.registerservice.repositories.RegisterRepository;
 import lombok.Generated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class RegisterService {
@@ -15,13 +18,10 @@ public class RegisterService {
     RegisterRepository registerRepository;
 
     @Autowired
-    CollectionService collectionService;
+    RestTemplate restTemplate;
 
-    @Autowired
-    GreaseAndSolidService greaseAndSolidService;
-
-    public ArrayList<RegisterEntity> obtenerRegistros(){
-        return (ArrayList<RegisterEntity>) registerRepository.findAll();
+    public List<RegisterEntity> obtenerRegistros(){
+        return registerRepository.findAll();
     }
 
     public RegisterEntity obtenerRegistroCodigo(String code){
@@ -29,21 +29,23 @@ public class RegisterService {
     }
 
     @Generated
-    public void actualizarLeche(){
+    public void actualizarRegistrosLeche(){
         for (RegisterEntity registro : registerRepository.findAll()){
             registro.setMilk(0.0);
         }
-        for (CollectionEntity acopio : collectionService.obtenerAcopios()){
-            RegisterEntity registro = registerRepository.getReferenceById(collectionService.obtenerCodigo(acopio));
-            registro.setMilk(collectionService.obtenerLeche(acopio)+registro.getMilk());
+        List<CollectionModel> acopios = restTemplate.getForObject("http://Collection-Service/acopios/obtener-todos", List.class);
+
+        for (CollectionModel acopio : acopios){
+            RegisterEntity registro = registerRepository.getReferenceById(restTemplate.getForObject("http://Collection-Service/acopios/obtener-codigo-acopio" + acopio, String.class));
+            registro.setMilk(restTemplate.getForObject("http://Collection-Service/acopios/obtener-leche-acopio" + acopio, Double.class) + registro.getMilk());
         }
     }
 
     @Generated
-    public void actualizarGrasaSolido(){
+    public void actualizarRegistrosGrasasSolidos(){
         for (RegisterEntity registro : registerRepository.findAll()){
-            registro.setGrease(greaseAndSolidService.obtenerGrasa(greaseAndSolidService.obtenerGrasasSolidosCodigo(registro.getCode())));
-            registro.setSolid(greaseAndSolidService.obtenerSolido(greaseAndSolidService.obtenerGrasasSolidosCodigo(registro.getCode())));
+            registro.setGrease(restTemplate.getForObject("http://GreaseAndSolid-Service/grasas-solidos/obtener-grasa" + restTemplate.getForObject("http://GreaseAndSolid-Service/grasas-solidos/obtener-por-codigo" + registro.getCode(), GreaseAndSolidModel.class), Double.class));
+            registro.setSolid(restTemplate.getForObject("http://GreaseAndSolid-Service/grasas-solidos/obtener-solido" + restTemplate.getForObject("http://GreaseAndSolid-Service/grasas-solidos/obtener-por-codigo" + registro.getCode(), GreaseAndSolidModel.class), Double.class));
         }
     }
 
@@ -139,6 +141,10 @@ public class RegisterService {
 
     public double obtenerLeche(RegisterEntity registro){
         return registro.getMilk();
+    }
+
+    public String obtenerCodigo(RegisterEntity registro){
+        return registro.getCode();
     }
 
     public double obtenerGrasa(RegisterEntity registro){

@@ -1,6 +1,6 @@
-package com.usach.mingeso.repositories;
+package com.usach.payservice.repositories;
 
-import com.usach.mingeso.entities.PayEntity;
+import com.usach.payservice.entities.PayEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

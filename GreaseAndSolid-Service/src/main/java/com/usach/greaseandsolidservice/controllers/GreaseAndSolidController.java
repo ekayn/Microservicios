@@ -1,44 +1,56 @@
-package com.usach.mingeso.controllers;
+package com.usach.greaseandsolidservice.controllers;
 
-import com.usach.mingeso.entities.GreaseAndSolidEntity;
-import com.usach.mingeso.services.GreaseAndSolidService;
-import com.usach.mingeso.services.RegisterService;
+import com.usach.greaseandsolidservice.entities.GreaseAndSolidEntity;
+import com.usach.greaseandsolidservice.services.GreaseAndSolidService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.List;
 
-
-@RequestMapping
-@Controller
+@RequestMapping("/grasas-solidos")
+@RestController
 public class GreaseAndSolidController {
     @Autowired
     GreaseAndSolidService greaseAndSolidService;
 
-    @Autowired
-    RegisterService registerService;
-
-    @GetMapping("/listar-grasas-solidos")
-    public String listarGrasasSolidos(Model model){
-        ArrayList<GreaseAndSolidEntity> grasasYSolidos = greaseAndSolidService.obtenerGrasasYSolidos();
-        model.addAttribute("grasasYSolidos", grasasYSolidos);
-        return "greaseAndSolidList";
+    @GetMapping
+    public ResponseEntity<List<GreaseAndSolidEntity>> obtenerGrasasSolidos(){
+        List<GreaseAndSolidEntity> grasasSolidos = greaseAndSolidService.obtenerGrasasYSolidos();
+        if (grasasSolidos.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(grasasSolidos);
     }
 
-    @GetMapping("/subir-grasas-solidos")
-    public String subirGrasasSolidos() { return "greaseAndSolidImport";}
+    @PostMapping
+    public ResponseEntity<GreaseAndSolidEntity> guardarGrasasSolidos(@RequestBody GreaseAndSolidEntity grasaSolido) {
+        greaseAndSolidService.guardarGrasaYSolido(greaseAndSolidService.obtenerCodigo(grasaSolido),
+                greaseAndSolidService.obtenerGrasa(grasaSolido),
+                greaseAndSolidService.obtenerSolido(grasaSolido));
+        return ResponseEntity.ok(grasaSolido);
+    }
 
-    @PostMapping("/subir-grasas-solidos")
+    @GetMapping("/existe-grasa-solido/{code}")
+    public ResponseEntity<Boolean> existeGrasaSolido(@PathVariable("code") String code){
+        GreaseAndSolidEntity grasaSolido = greaseAndSolidService.obtenerGrasasSolidosCodigo(code);
+        if (grasaSolido == null){
+            return ResponseEntity.ok(false);
+        }
+        return ResponseEntity.ok(true);
+    }
+    /*
+    @PostMapping("/guardar")
     public String guardarGrasasSolidos(@RequestParam("file") MultipartFile file) {
-        registerService.actualizarGrasaSolido();
+        greaseAndSolidService.actualizarRegistros();
         greaseAndSolidService.guardarCsv(file);
         greaseAndSolidService.cargarCsv(file.getOriginalFilename());
-        return "redirect:/subir-grasas-solidos";
+
+        return "redirect:/subir";
     }
+    */
+
 }

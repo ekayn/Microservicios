@@ -1,12 +1,18 @@
-package com.usach.mingeso.services;
+package com.usach.payservice.services;
 
-import com.usach.mingeso.entities.*;
-import com.usach.mingeso.repositories.*;
+import com.usach.payservice.entities.*;
+import com.usach.payservice.models.CollectionModel;
+import com.usach.payservice.models.GreaseAndSolidModel;
+import com.usach.payservice.models.SupplierModel;
+import com.usach.payservice.repositories.*;
 import lombok.Generated;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PayService {
@@ -14,19 +20,10 @@ public class PayService {
     PayRepository payRepository;
 
     @Autowired
-    RegisterService registerService;
+    RestTemplate restTemplate;
 
-    @Autowired
-    CollectionService collectionService;
-
-    @Autowired
-    GreaseAndSolidService greaseAndSolidService;
-
-    @Autowired
-    SupplierService supplierService;
-
-    public ArrayList<PayEntity> obtenerPagos(){
-        return (ArrayList<PayEntity>) payRepository.findAll();
+    public List<PayEntity> obtenerPagos(){
+        return payRepository.findAll();
     }
 
     public Double pagoTotalLeche(Double milkPay, Double greasePay, Double solidPay, Double frecuencyBonification){
@@ -99,11 +96,23 @@ public class PayService {
         return monto - retencion;
     }
 
+    public Boolean existeProveedor(String code){
+        return restTemplate.getForObject("http://Supplier-Service/proveedores/existe-proveedor/" + code, Boolean.class);
+    }
+
+    public Boolean existeGrasaSolido(String code){
+        return restTemplate.getForObject("http://GreaseAndSolid-Service/grasas-solidos/existe-grasa-solido/" + code, Boolean.class);
+    }
+
+    public PayEntity obtenerPagoCodigo(String code){
+        return payRepository.getReferenceById(code);
+    }
+
     @Generated
     public void pagarPorId(String code) {
-        SupplierEntity proveedor = supplierService.obtenerProveedorCodigo(code);
-        GreaseAndSolidEntity grasaSolido = greaseAndSolidService.obtenerGrasasSolidosCodigo(code);
-        ArrayList<CollectionEntity> acopios = collectionService.obtenerAcopiosCodigo(code);
+        SupplierModel proveedor = supplierService.obtenerProveedorCodigo(code);
+        GreaseAndSolidModel grasaSolido = greaseAndSolidService.obtenerGrasasSolidosCodigo(code);
+        ArrayList<CollectionModel> acopios = collectionService.obtenerAcopiosCodigo(code);
         
         PayEntity pago = new PayEntity();
 

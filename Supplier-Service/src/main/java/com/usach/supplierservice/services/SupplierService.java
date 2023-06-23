@@ -1,10 +1,11 @@
-package com.usach.mingeso.services;
+package com.usach.supplierservice.services;
 
-import com.usach.mingeso.entities.SupplierEntity;
-import com.usach.mingeso.repositories.SupplierRepository;
+import com.usach.supplierservice.entities.SupplierEntity;
+import com.usach.supplierservice.repositories.SupplierRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 
@@ -12,6 +13,14 @@ import java.util.ArrayList;
 public class SupplierService {
     @Autowired
     SupplierRepository supplierRepository;
+
+    @Autowired
+    RestTemplate restTemplate;
+
+    public void ingresarRegistroCodigo(String supplierCode){
+        restTemplate.postForObject("http://Register-Service/registro/" + supplierCode, null, Void.class);
+    }
+
     public ArrayList<SupplierEntity> obtenerProveedores(){
         return (ArrayList<SupplierEntity>) supplierRepository.findAll();
     }
@@ -55,6 +64,10 @@ public class SupplierService {
         } else{
             return 0.0;
         }
+    }
+
+    public String obtenerCodigo(SupplierEntity proveedor) {
+        return proveedor.getCode();
     }
 
     public String obtenerNombre(SupplierEntity proveedor) {

@@ -1,4 +1,4 @@
-package com.usach.mingeso.entities;
+package com.usach.payservice.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

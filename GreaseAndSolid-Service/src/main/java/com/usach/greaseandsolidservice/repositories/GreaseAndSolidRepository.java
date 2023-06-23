@@ -1,6 +1,6 @@
-package com.usach.mingeso.repositories;
+package com.usach.greaseandsolidservice.repositories;
 
-import com.usach.mingeso.entities.GreaseAndSolidEntity;
+import com.usach.greaseandsolidservice.entities.GreaseAndSolidEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

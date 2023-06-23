@@ -1,11 +1,12 @@
-package com.usach.mingeso.services;
+package com.usach.greaseandsolidservice.services;
 
-import com.usach.mingeso.entities.GreaseAndSolidEntity;
-import com.usach.mingeso.repositories.GreaseAndSolidRepository;
+import com.usach.greaseandsolidservice.entities.GreaseAndSolidEntity;
+import com.usach.greaseandsolidservice.repositories.GreaseAndSolidRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Generated;
@@ -22,6 +23,13 @@ import java.nio.file.Paths;
 public class GreaseAndSolidService {
     @Autowired
     GreaseAndSolidRepository greaseAndSolidRepository;
+
+    @Autowired
+    RestTemplate restTemplate;
+
+    public void actualizarRegistros(){
+        restTemplate.postForObject("http://Register-Service/registros/actualizar-registros-grasas-solidos", null, Void.class);
+    }
 
     public ArrayList<GreaseAndSolidEntity> obtenerGrasasYSolidos(){
         return (ArrayList<GreaseAndSolidEntity>) greaseAndSolidRepository.findAll();
@@ -54,7 +62,7 @@ public class GreaseAndSolidService {
         return greaseAndSolidRepository.getReferenceById(code);
     }
 
-    private final Logger logg = LoggerFactory.getLogger(CollectionService.class);
+    private final Logger logg = LoggerFactory.getLogger(GreaseAndSolidService.class);
     @Generated
     public void guardarCsv(MultipartFile file){
         String filename = file.getOriginalFilename();
@@ -131,6 +139,10 @@ public class GreaseAndSolidService {
         } else {
             return 150.0;
         }
+    }
+
+    public String obtenerCodigo(GreaseAndSolidEntity grasaSolido){
+        return grasaSolido.getCode();
     }
 
     public double obtenerGrasa(GreaseAndSolidEntity grasaSolido){

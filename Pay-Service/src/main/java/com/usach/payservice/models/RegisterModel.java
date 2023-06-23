@@ -1,19 +1,13 @@
-package com.usach.registerservice.entities;
+package com.usach.payservice.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "registers")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class RegisterEntity {
-    @Id
-    @Column(nullable=false, length = 5)
+public class RegisterModel {
     private String code;
     private Double milk;
     private Double grease;

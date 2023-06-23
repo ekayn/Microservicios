@@ -1,6 +1,6 @@
-package com.usach.mingeso.repositories;
+package com.usach.registerservice.repositories;
 
-import com.usach.mingeso.entities.RegisterEntity;
+import com.usach.registerservice.entities.RegisterEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

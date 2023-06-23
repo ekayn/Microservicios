@@ -3,14 +3,14 @@ spring:
     restart:
       aditional-paths: src/main/java
   application:
-    name: Supplier-Service
+    name: GreaseAndSolid-Service
   cloud:
     config:
       enabled: true
       uri: http://localhost:8081/
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/supplier-service?autorReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:postgresql://localhost:5432/greaseandsolid-service?autorReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
     username: postgres
     password: nikochea1997
   jpa:

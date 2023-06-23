@@ -1,11 +1,12 @@
-package com.usach.mingeso.services;
+package com.usach.collectionservice.services;
 
-import com.usach.mingeso.entities.CollectionEntity;
-import com.usach.mingeso.repositories.CollectionRepository;
+import com.usach.collectionservice.entities.CollectionEntity;
+import com.usach.collectionservice.repositories.CollectionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Generated;
@@ -17,17 +18,25 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 public class CollectionService {
     @Autowired
     CollectionRepository collectionRepository;
 
-    public ArrayList<CollectionEntity> obtenerAcopios(){
-        return (ArrayList<CollectionEntity>) collectionRepository.findAll();
+    @Autowired
+    RestTemplate restTemplate;
+
+    public void actualizarRegistrosLeche(){
+        restTemplate.postForObject("http://Register-Service/actualizar-registros-leche", null, Void.class);
     }
 
-    public ArrayList<CollectionEntity> obtenerAcopiosCodigo(String code){
+    public List<CollectionEntity> obtenerAcopios(){
+        return collectionRepository.findAll();
+    }
+
+    public List<CollectionEntity> obtenerAcopiosCodigo(String code){
         return collectionRepository.findByCode(code);
     }
 
@@ -151,6 +160,14 @@ public class CollectionService {
 
     public double obtenerLeche(CollectionEntity acopio){
         return acopio.getMilk();
+    }
+
+    public String obtenerFecha(CollectionEntity acopio){
+        return acopio.getDate();
+    }
+
+    public String obtenerTurno(CollectionEntity acopio){
+        return acopio.getShift();
     }
 
     public void eliminarAcopio(CollectionEntity acopio) {
