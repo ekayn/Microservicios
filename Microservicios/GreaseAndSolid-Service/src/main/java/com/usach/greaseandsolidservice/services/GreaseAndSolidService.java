@@ -141,15 +141,18 @@ public class GreaseAndSolidService {
         }
     }
 
-    public String obtenerCodigo(GreaseAndSolidEntity grasaSolido){
+    public String obtenerCodigo(String code){
+        GreaseAndSolidEntity grasaSolido = obtenerGrasasSolidosCodigo(code);
         return grasaSolido.getCode();
     }
 
-    public double obtenerGrasa(GreaseAndSolidEntity grasaSolido){
+    public double obtenerGrasa(String code){
+        GreaseAndSolidEntity grasaSolido = obtenerGrasasSolidosCodigo(code);
         return grasaSolido.getGrease();
     }
 
-    public double obtenerSolido(GreaseAndSolidEntity grasaSolido){
+    public double obtenerSolido(String code){
+        GreaseAndSolidEntity grasaSolido = obtenerGrasasSolidosCodigo(code);
         return grasaSolido.getSolid();
     }
 

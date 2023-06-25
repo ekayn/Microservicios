@@ -27,8 +27,9 @@ public class CollectionController {
         return ResponseEntity.ok(acopios);
     }
 
-    @GetMapping("/obtener-codigo/{acopio}")
-    public ResponseEntity<String> obtenerCodigoAcopio(@PathVariable("acopio") CollectionEntity acopio) {
+
+    @GetMapping("/obtener-codigo")
+    public ResponseEntity<String> obtenerCodigoAcopio(@RequestParam("acopio") CollectionEntity acopio) {
         String codigo = collectionService.obtenerCodigo(acopio);
         if (codigo == null){
             return ResponseEntity.notFound().build();
@@ -36,8 +37,8 @@ public class CollectionController {
         return ResponseEntity.ok(codigo);
     }
 
-    @GetMapping("/obtener-leche/{acopio}")
-    public ResponseEntity<Double> obtenerLecheAcopio(@PathVariable("acopio") CollectionEntity acopio) {
+    @GetMapping("/obtener-leche")
+    public ResponseEntity<Double> obtenerLecheAcopio(@RequestParam("acopio") CollectionEntity acopio) {
         Double leche = collectionService.obtenerLeche(acopio);
         if (leche == null){
             return ResponseEntity.notFound().build();

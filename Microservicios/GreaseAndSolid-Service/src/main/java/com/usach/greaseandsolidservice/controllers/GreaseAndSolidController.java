@@ -46,27 +46,27 @@ public class GreaseAndSolidController {
         return ResponseEntity.ok(grasaSolido);
     }
 
-    @GetMapping("/obtener-grasa/{grasaSolido}")
-    public ResponseEntity<Double> obtenerGrasa(@PathVariable("grasaSolido") GreaseAndSolidEntity grasaSolido) {
-        Double grasa = greaseAndSolidService.obtenerGrasa(grasaSolido);
+    @GetMapping("/obtener-grasa/{code}")
+    public ResponseEntity<Double> obtenerGrasa(@PathVariable("code") String code) {
+        Double grasa = greaseAndSolidService.obtenerGrasa(code);
         return ResponseEntity.ok(grasa);
     }
 
-    @GetMapping("/obtener-solido/{grasaSolido}")
-    public ResponseEntity<Double> obtenerSolido(@PathVariable("grasaSolido") GreaseAndSolidEntity grasaSolido) {
-        Double solido = greaseAndSolidService.obtenerSolido(grasaSolido);
+    @GetMapping("/obtener-solido/{code}")
+    public ResponseEntity<Double> obtenerSolido(@PathVariable("code") String code) {
+        Double solido = greaseAndSolidService.obtenerSolido(code);
         return ResponseEntity.ok(solido);
     }
 
     @GetMapping("/pago-grasa/{grasa}")
-    public ResponseEntity<Double> calculoPagoGrasa(@PathVariable("grasa") Double grasa) {
-        Double grasaPago = greaseAndSolidService.pagoGrasa(grasa);
+    public ResponseEntity<Double> calculoPagoGrasa(@PathVariable("grasa") String grasa) {
+        Double grasaPago = greaseAndSolidService.pagoGrasa(Double.parseDouble(grasa));
         return ResponseEntity.ok(grasaPago);
     }
 
     @GetMapping("/pago-solido/{solido}")
-    public ResponseEntity<Double> calculoPagoSolido(@PathVariable("solido") Double solido) {
-        Double solidoPago = greaseAndSolidService.pagoSolido(solido);
+    public ResponseEntity<Double> calculoPagoSolido(@PathVariable("solido") String solido) {
+        Double solidoPago = greaseAndSolidService.pagoSolido(Double.parseDouble(solido));
         return ResponseEntity.ok(solidoPago);
     }
 
@@ -77,12 +77,9 @@ public class GreaseAndSolidController {
         greaseAndSolidService.cargarCsv(file.getOriginalFilename());
     }
 
-    @PostMapping
-    public ResponseEntity<GreaseAndSolidEntity> guardarGrasasSolidos(@RequestBody GreaseAndSolidEntity grasaSolido) {
-                greaseAndSolidService.guardarGrasaYSolido(greaseAndSolidService.obtenerCodigo(grasaSolido),
-                greaseAndSolidService.obtenerGrasa(grasaSolido),
-                greaseAndSolidService.obtenerSolido(grasaSolido));
-        return ResponseEntity.ok(grasaSolido);
+    @PostMapping("/guardar/{codigo}/{grasa}/{solido}")
+    public void guardarGrasasSolidos(@PathVariable("codigo") String codigo, @PathVariable("grasa") String grasa, @PathVariable("solido") String solido) {
+                greaseAndSolidService.guardarGrasaYSolido(codigo, Double.parseDouble(grasa), Double.parseDouble(solido));
     }
 
     @PostMapping("/eliminar")

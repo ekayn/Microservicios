@@ -72,4 +72,43 @@ public class SupplierController{
         supplierService.ingresarRegistroCodigo(supplierCode);
         return ResponseEntity.ok(proveedor);
     }
+
+    @GetMapping("/obtener-nombre/{code}")
+    public ResponseEntity<String> obtenerNombre(@PathVariable("code") String code){
+        SupplierEntity proveedor = supplierService.obtenerProveedorCodigo(code);
+        if (proveedor == null){
+            return ResponseEntity.notFound().build();
+        }
+        String nombre = supplierService.obtenerNombre(proveedor);
+        if (nombre == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(nombre);
+    }
+
+    @GetMapping("/obtener-categoria/{code}")
+    public ResponseEntity<String> obtenerCategoria(@PathVariable("code") String code){
+        SupplierEntity proveedor = supplierService.obtenerProveedorCodigo(code);
+        if (proveedor == null){
+            return ResponseEntity.notFound().build();
+        }
+        String categoria = supplierService.obtenerCategoria(proveedor);
+        if (categoria == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(categoria);
+    }
+
+    @GetMapping("/obtener-retencion/{code}")
+    public ResponseEntity<String> obtenerRetencion(@PathVariable("code") String code){
+        SupplierEntity proveedor = supplierService.obtenerProveedorCodigo(code);
+        if (proveedor == null){
+            return ResponseEntity.notFound().build();
+        }
+        String retencion = supplierService.obtenerRetencion(proveedor);
+        if (retencion == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(retencion);
+    }
 }

@@ -17,7 +17,7 @@ public class RegisterController {
     RegisterService registerService;
 
     @GetMapping
-    public ResponseEntity<List<RegisterEntity>> listarRegistros(Model model){
+    public ResponseEntity<List<RegisterEntity>> listarRegistros(){
         List<RegisterEntity> registros = registerService.obtenerRegistros();
         if (registros.isEmpty()){
             return ResponseEntity.noContent().build();
@@ -26,7 +26,7 @@ public class RegisterController {
     }
 
     @PostMapping
-    public ResponseEntity<RegisterEntity> guardarRegistro(@RequestBody RegisterEntity registro) {
+    public ResponseEntity<RegisterEntity> guardarRegistro(@RequestParam RegisterEntity registro) {
         registerService.guardarRegistro(registerService.obtenerCodigo(registro));
         return ResponseEntity.ok(registro);
     }
@@ -52,15 +52,83 @@ public class RegisterController {
         return ResponseEntity.ok(registro);
     }
 
-    public double obtenerLeche(RegisterEntity registro){
-        return registro.getMilk();
+    @GetMapping("/obtener-leche")
+    public ResponseEntity<Double> obtenerLeche(@RequestParam("registro") RegisterEntity registro) {
+        Double leche = registerService.obtenerLeche(registro);
+        if (leche == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(leche);
     }
 
-    public double obtenerGrasa(RegisterEntity registro){
-        return registro.getGrease();
+    @GetMapping("/obtener-grasa")
+    public ResponseEntity<Double> obtenerGrasa(@RequestParam("registro") RegisterEntity registro) {
+        Double grasa = registerService.obtenerGrasa(registro);
+        if (grasa == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(grasa);
     }
 
-    public double obtenerSolido(RegisterEntity registro){
-        return registro.getSolid();
+    @GetMapping("/obtener-Solido")
+    public ResponseEntity<Double> obtenerSolido(@RequestParam("registro") RegisterEntity registro) {
+        Double solido = registerService.obtenerSolido(registro);
+        if (solido == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(solido);
+    }
+
+    @GetMapping("/variacion-leche")
+    public ResponseEntity<Double> variacionLeche(@RequestParam("valorAntes") Double valorAntes, @RequestParam("valorAhora") Double valorAhora) {
+        Double variacion = registerService.variacionLeche(valorAntes, valorAhora);
+        if (variacion == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(variacion);
+    }
+
+    @GetMapping("/variacion-grasa")
+    public ResponseEntity<Double> variacionGrasa(@RequestParam("valorAntes") Double valorAntes, @RequestParam("valorAhora") Double valorAhora) {
+        Double variacion = registerService.variacionGrasa(valorAntes, valorAhora);
+        if (variacion == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(variacion);
+    }
+
+    @GetMapping("/variacion-solido")
+    public ResponseEntity<Double> variacionSolido(@RequestParam("valorAntes") Double valorAntes, @RequestParam("valorAhora") Double valorAhora) {
+        Double variacion = registerService.variacionSolido(valorAntes, valorAhora);
+        if (variacion == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(variacion);
+    }
+
+    @GetMapping("/descuento-leche")
+    public ResponseEntity<Double> descuentoLeche(@RequestParam("valor") Double valor) {
+        Double descuento = registerService.descuentoLeche(valor);
+        if (descuento == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(descuento);
+    }
+
+    @GetMapping("/descuento-grasa")
+    public ResponseEntity<Double> descuentoGrasa(@RequestParam("valor") Double valor) {
+        Double descuento = registerService.descuentoGrasa(valor);
+        if (descuento == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(descuento);
+    }
+    @GetMapping("/descuento-solido")
+    public ResponseEntity<Double> descuentoSolido(@RequestParam("valor") Double valor) {
+        Double descuento = registerService.descuentoSolido(valor);
+        if (descuento == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(descuento);
     }
 }
