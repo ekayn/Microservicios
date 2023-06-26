@@ -44,15 +44,15 @@ public class SupplierController{
         return ResponseEntity.ok(proveedor);
     }
 
-    @GetMapping("/pago-categoria/{code}")
-    public ResponseEntity<Double> pagoCategoriaCodigo(@PathVariable("code") String code){
-        Double pago = supplierService.pagoCategoria(code);
+    @GetMapping("/pago-categoria/{ctg}")
+    public ResponseEntity<Double> pagoCategoriaCodigo(@PathVariable("ctg") String ctg){
+        Double pago = supplierService.pagoCategoria(ctg);
         return ResponseEntity.ok(pago);
     }
 
-    @GetMapping("/pago-retencion/{code}")
-    public ResponseEntity<Double> pagoRetencionCodigo(@PathVariable("code") String code){
-        Double pago = supplierService.pagoRetencion(code);
+    @GetMapping("/pago-retencion/{rtc}")
+    public ResponseEntity<Double> pagoRetencionCodigo(@PathVariable("rtc") String rtc){
+        Double pago = supplierService.pagoRetencion(rtc);
         return ResponseEntity.ok(pago);
     }
 

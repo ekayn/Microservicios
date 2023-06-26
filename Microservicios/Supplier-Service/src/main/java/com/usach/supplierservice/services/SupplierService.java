@@ -65,7 +65,6 @@ public class SupplierService {
             return 0.0;
         }
     }
-
     public String obtenerCodigo(SupplierEntity proveedor) {
         return proveedor.getCode();
     }
