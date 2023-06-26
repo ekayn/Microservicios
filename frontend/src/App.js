@@ -1,7 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomeComponent from './components/HomeComponent.jsx';
-/*
+
 import CollectionImportComponent from './components/CollectionImportComponent';
+/*
 import CollectionListComponent from './components/CollectionListComponent';
 
 import GreaseAndSolidImportComponent from './components/GreaseAndSolidImportComponent';
@@ -13,9 +14,8 @@ import RegisterListComponent from './components/RegisterListComponent';
 import SupplierAddComponent from './components/SupplierAddComponent';
 import SupplierListComponent from './components/SupplierListComponent';
 
-          
-          <Route path= "/subir-archivo-acopios" element={<CollectionImportComponent />} />
-          <Route path= "/listar-acopios" element={<CollectionListComponent />} />
+
+          <Route path= "/listar-acopios" element={<CollectionListComponent />} />          
           <Route path= "/subir-archivo-grasas-solidos" element={<GreaseAndSolidImportComponent />} />
           <Route path= "/listar-grasas-solidos" element={<GreaseAndSolidListComponent />} />
           <Route path= "/pagar" element={<PayAddComponent />} />
@@ -32,7 +32,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomeComponent />} />
-          
+          <Route path= "/subir-archivo-acopios" element={<CollectionImportComponent />} />
+        
           
           
           
