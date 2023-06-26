@@ -57,16 +57,20 @@ public class SupplierController{
     }
 
     @PostMapping
-    public ResponseEntity<String> guardarProveedor(@RequestParam("supplierCode") String supplierCode, @RequestParam("supplierName") String supplierName, @RequestParam("supplierCategory") String supplierCategory, @RequestParam("supplierRetention") String supplierRetention) {
+    public ResponseEntity<SupplierEntity> guardarProveedor(@RequestBody SupplierEntity proveedor) {
+        String supplierCode = supplierService.obtenerCodigo(proveedor);
+        String supplierName = supplierService.obtenerNombre(proveedor);
+        String supplierCategory = supplierService.obtenerCategoria(proveedor);
+        String supplierRetention = supplierService.obtenerRetencion(proveedor);
 
         if (supplierService.existeProveedorPorCodigo(supplierCode)){
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         } else if (supplierService.existeProveedorPorNombre(supplierName)){
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
         supplierService.guardarProveedor(supplierName, supplierCode, supplierCategory, supplierRetention);
         supplierService.ingresarRegistroCodigo(supplierCode);
-        return ResponseEntity.ok("Proveedor guardado con éxito");
+        return ResponseEntity.ok(proveedor);
     }
 
     @GetMapping("/obtener-nombre/{code}")
