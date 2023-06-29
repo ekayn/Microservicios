@@ -10,6 +10,8 @@ import lombok.Generated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -114,14 +116,18 @@ public class PayService {
 
         SupplierModel proveedor = restTemplate.getForObject("http://Supplier-Service/proveedores/" + code, SupplierModel.class);
         GreaseAndSolidModel grasaSolido = restTemplate.getForObject("http://GreaseAndSolid-Service/grasas-solidos/" + code, GreaseAndSolidModel.class);
-        List<CollectionModel> acopios = restTemplate.getForObject("http://Collection-Service/acopios/" + code, List.class);
         RegisterModel registro = restTemplate.getForObject("http://Register-Service/registros/" + code, RegisterModel.class);
+
+        Double bonificacionFrecuencia = restTemplate.getForObject("http://Collection-Service/acopios/bonificacion-frecuencia/" + code, Double.class);
+        Double lecheTotal = restTemplate.getForObject("http://Collection-Service/acopios/leche-total/" + code, Double.class);
+        String quincena = restTemplate.getForObject("http://Collection-Service/acopios/quincena", String.class);
+        Double lechePromedio = restTemplate.getForObject("http://Collection-Service/acopios/leche-promedio/" + lecheTotal, Double.class);
+        Double diasEntregas = restTemplate.getForObject("http://Collection-Service/acopios/dias-entregas/" + code, Double.class);
 
         PayEntity pago = new PayEntity();
 
         pago.setCode(code);
-        List<CollectionModel> acopiosQuincena = restTemplate.getForObject("http://Collection-Service/acopios/", List.class);
-        String quincena = restTemplate.getForObject("http://Collection-Service/acopios/quincena", String.class, acopiosQuincena);
+
         String categoria = restTemplate.getForObject("http://Supplier-Service/proveedores/obtener-categoria/" + code, String.class);
         String retencion = restTemplate.getForObject("http://Supplier-Service/proveedores/obtener-retencion/" + code, String.class);
         String nombre = restTemplate.getForObject("http://Supplier-Service/proveedores/obtener-nombre/" + code, String.class);
@@ -130,9 +136,6 @@ public class PayService {
         pago.setCategory(categoria);
         pago.setName(nombre);
 
-        Double lecheTotal = restTemplate.getForObject("http://Collection-Service/acopios/leche-total", Double.class, acopios);
-        Double diasEntregas = restTemplate.getForObject("http://Collection-Service/acopios/dias-entregas", Double.class, acopios);
-        Double lechePromedio = restTemplate.getForObject("http://Collection-Service/acopios/leche-promedio", Double.class, lecheTotal);
         Double lecheRegistro = restTemplate.getForObject("http://Register-Service/registros/obtener-leche", Double.class, registro);
         Double lecheVariacion = restTemplate.getForObject("http://Register-Service/registros/variacion-leche", Double.class, lecheRegistro, lecheTotal);
         pago.setMilk(lecheTotal);
@@ -162,7 +165,6 @@ public class PayService {
         pago.setGreasePay(pagoGrasa * lecheTotal);
         pago.setSolidPay(pagoSolido * lecheTotal);
 
-        Double bonificacionFrecuencia = restTemplate.getForObject("http://Collection-Service/acopios/bonificacion-frecuencia", Double.class, acopios);
         Double descuentoLeche = restTemplate.getForObject("http://Register-Service/registros/descuento-leche", Double.class, pago.getMilkChanged());
         Double descuentoGrasa = restTemplate.getForObject("http://Register-Service/registros/descuento-grasa", Double.class, pago.getGreaseChanged());
         Double descuentoSolido = restTemplate.getForObject("http://Register-Service/registros/descuento-solido", Double.class, pago.getSolidChanged());
