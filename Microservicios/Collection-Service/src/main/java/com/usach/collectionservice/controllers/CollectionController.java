@@ -27,25 +27,6 @@ public class CollectionController {
         return ResponseEntity.ok(acopios);
     }
 
-
-    @GetMapping("/obtener-codigo")
-    public ResponseEntity<String> obtenerCodigoAcopio(@RequestParam("acopio") CollectionEntity acopio) {
-        String codigo = collectionService.obtenerCodigo(acopio);
-        if (codigo == null){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(codigo);
-    }
-
-    @GetMapping("/obtener-leche")
-    public ResponseEntity<Double> obtenerLecheAcopio(@RequestParam("acopio") CollectionEntity acopio) {
-        Double leche = collectionService.obtenerLeche(acopio);
-        if (leche == null){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(leche);
-    }
-
     @GetMapping("/{code}")
     public ResponseEntity<List<CollectionEntity>> obtenerAcopiosCodigo(@PathVariable("code") String code) {
         List<CollectionEntity> acopios = collectionService.obtenerAcopiosCodigo(code);
@@ -55,58 +36,40 @@ public class CollectionController {
         return ResponseEntity.ok(acopios);
     }
 
-    @GetMapping("/bonificacion-frecuencia")
-    public ResponseEntity<Double> bonificacionFrecuencias(@RequestParam("acopios") List<CollectionEntity> acopios) {
-        if (acopios.isEmpty()){
-            ResponseEntity.ok(0);
-        }
-        Double bonificacion = collectionService.bonificacionFrecuencia(acopios);
+    @GetMapping("/bonificacion-frecuencia/{code}")
+    public ResponseEntity<Double> bonificacionFrecuencias(@PathVariable("code") String code) {
+        Double bonificacion = collectionService.bonificacionFrecuencia(code);
         return ResponseEntity.ok(bonificacion);
     }
 
-    @GetMapping("/leche-total")
-    public ResponseEntity<Double> lecheTotal(@RequestParam("acopios") List<CollectionEntity> acopios) {
-        if (acopios.isEmpty()){
-            ResponseEntity.ok(0);
-        }
-        Double leche = collectionService.lecheTotal(acopios);
+    @GetMapping("/leche-total/{code}")
+    public ResponseEntity<Double> lecheTotal(@PathVariable("code") String code) {
+        Double leche = collectionService.lecheTotal(code);
         return ResponseEntity.ok(leche);
     }
 
     @GetMapping("/quincena")
-    public ResponseEntity<String> quincena(@RequestParam("acopios") List<CollectionEntity> acopios) {
-        String fecha = collectionService.obtenerQuincena(acopios);
+    public ResponseEntity<String> quincena() {
+        String fecha = collectionService.obtenerQuincena();
         return ResponseEntity.ok(fecha);
     }
 
-    @GetMapping("/leche-promedio")
-    public ResponseEntity<Double> lechePromedio(@RequestParam("lecheTotal") Double lecheTotal) {
-        Double lechePromedio = collectionService.lechePromedio(lecheTotal);
+    @GetMapping("/leche-promedio/{total}")
+    public ResponseEntity<Double> lechePromedio(@PathVariable("total") Double total) {
+        Double lechePromedio = collectionService.lechePromedio(total);
         return ResponseEntity.ok(lechePromedio);
     }
 
-    @GetMapping("/dias-entregas")
-    public ResponseEntity<Double> diasEntregas(@RequestParam("acopios") List<CollectionEntity> acopios) {
-        if (acopios.isEmpty()){
-            ResponseEntity.ok(0);
-        }
-        Double totalDias = collectionService.diasEntregaTotal(acopios);
+    @GetMapping("/dias-entregas/{code}")
+    public ResponseEntity<Double> diasEntregas(@PathVariable("code") String code) {
+        Double totalDias = collectionService.diasEntregaTotal(code);
         return ResponseEntity.ok(totalDias);
     }
 
     @PostMapping("/subir-data")
-    public void guardarAcopios(@RequestParam("file") MultipartFile file, RedirectAttributes ms) throws FileNotFoundException, ParseException {
-        collectionService.actualizarRegistrosLeche();
+    public void guardarData(@RequestParam("file") MultipartFile file) {
+        collectionService.restablecerRegistrosLeche();
         collectionService.guardarCsv(file);
         collectionService.cargarCsv(file.getOriginalFilename());
-    }
-
-    @PostMapping
-    public ResponseEntity<CollectionEntity> guardarAcopio(@RequestBody CollectionEntity acopio) {
-        collectionService.guardarAcopio(collectionService.obtenerFecha(acopio),
-                collectionService.obtenerTurno(acopio),
-                collectionService.obtenerCodigo(acopio),
-                collectionService.obtenerLeche(acopio));
-        return ResponseEntity.ok(acopio);
     }
 }

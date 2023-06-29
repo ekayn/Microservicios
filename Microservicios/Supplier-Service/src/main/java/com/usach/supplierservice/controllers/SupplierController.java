@@ -3,12 +3,9 @@ package com.usach.supplierservice.controllers;
 import com.usach.supplierservice.entities.SupplierEntity;
 import com.usach.supplierservice.services.SupplierService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("/proveedores")
@@ -56,59 +53,18 @@ public class SupplierController{
         return ResponseEntity.ok(pago);
     }
 
-    @PostMapping
-    public ResponseEntity<SupplierEntity> guardarProveedor(@RequestBody SupplierEntity proveedor) {
-        String supplierCode = supplierService.obtenerCodigo(proveedor);
-        String supplierName = supplierService.obtenerNombre(proveedor);
-        String supplierCategory = supplierService.obtenerCategoria(proveedor);
-        String supplierRetention = supplierService.obtenerRetencion(proveedor);
-
+    @PostMapping("/{supplierCode}/{supplierName}/{supplierCategory}/{supplierRetention}")
+    public ResponseEntity<String> guardarProveedor(@PathVariable("supplierCode") String supplierCode,
+                                                           @PathVariable("supplierName") String supplierName,
+                                                           @PathVariable("supplierCategory") String supplierCategory,
+                                                           @PathVariable("supplierRetention") String supplierRetention) {
         if (supplierService.existeProveedorPorCodigo(supplierCode)){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.ok("Codigo del roveedor ya existente");
         } else if (supplierService.existeProveedorPorNombre(supplierName)){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.ok("Nombre del roveedor ya existente");
         }
         supplierService.guardarProveedor(supplierName, supplierCode, supplierCategory, supplierRetention);
         supplierService.ingresarRegistroCodigo(supplierCode);
-        return ResponseEntity.ok(proveedor);
-    }
-
-    @GetMapping("/obtener-nombre/{code}")
-    public ResponseEntity<String> obtenerNombre(@PathVariable("code") String code){
-        SupplierEntity proveedor = supplierService.obtenerProveedorCodigo(code);
-        if (proveedor == null){
-            return ResponseEntity.notFound().build();
-        }
-        String nombre = supplierService.obtenerNombre(proveedor);
-        if (nombre == null){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(nombre);
-    }
-
-    @GetMapping("/obtener-categoria/{code}")
-    public ResponseEntity<String> obtenerCategoria(@PathVariable("code") String code){
-        SupplierEntity proveedor = supplierService.obtenerProveedorCodigo(code);
-        if (proveedor == null){
-            return ResponseEntity.notFound().build();
-        }
-        String categoria = supplierService.obtenerCategoria(proveedor);
-        if (categoria == null){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(categoria);
-    }
-
-    @GetMapping("/obtener-retencion/{code}")
-    public ResponseEntity<String> obtenerRetencion(@PathVariable("code") String code){
-        SupplierEntity proveedor = supplierService.obtenerProveedorCodigo(code);
-        if (proveedor == null){
-            return ResponseEntity.notFound().build();
-        }
-        String retencion = supplierService.obtenerRetencion(proveedor);
-        if (retencion == null){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(retencion);
+        return ResponseEntity.ok("Proveedor guardado con éxito");
     }
 }

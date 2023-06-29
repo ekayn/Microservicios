@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import NavbarComponent from "./NavbarComponent";
-import FileUploadCollectionService from "../services/FileUploadCollectionService";
+import FileUploadService from "../services/FileUploadCollectionService";
 import styled from "styled-components";
 import swal from 'sweetalert';
 
@@ -33,7 +33,7 @@ class FileUploadCollectionComponent extends Component{
         swal("Archivo cargado correctamente!", {icon: "success", timer: "3000"});
         const formData = new FormData();
         formData.append("file", this.state.file);
-        FileUploadCollectionService.CargarArchivo(formData).then((res) => {
+        FileUploadService.CargarArchivo(formData).then((res) => {
         });
       }
       else{

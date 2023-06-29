@@ -27,8 +27,14 @@ public class CollectionService {
     @Autowired
     RestTemplate restTemplate;
 
-    public void actualizarRegistrosLeche(){
-        restTemplate.postForObject("http://Register-Service/actualizar-registros-leche", null, Void.class);
+    private final Logger logg = LoggerFactory.getLogger(CollectionService.class);
+
+    public void restablecerRegistrosLeche(){
+        restTemplate.postForObject("http://Register-Service/registros/restablecer-leche", null, Void.class);
+        List<CollectionEntity> acopios = obtenerAcopios();
+        for (CollectionEntity acopio : acopios){
+            restTemplate.postForObject("http://Register-Service/registros/guardar-leche/" + acopio.getCode() + "/" + acopio.getMilk(), null, Void.class);
+        }
     }
 
     public List<CollectionEntity> obtenerAcopios(){
@@ -55,8 +61,6 @@ public class CollectionService {
         }
         collectionRepository.save(acopio);
     }
-
-    private final Logger logg = LoggerFactory.getLogger(CollectionService.class);
 
     @Generated
     public void guardarCsv(MultipartFile file){
@@ -106,7 +110,8 @@ public class CollectionService {
         }
     }
 
-    public double bonificacionFrecuencia(List<CollectionEntity> acopios){
+    public double bonificacionFrecuencia(String code){
+        List<CollectionEntity> acopios = obtenerAcopiosCodigo(code);
         double totalManana = 0.0;
         double totalTarde = 0.0;
         for (CollectionEntity acopio : acopios) {
@@ -127,7 +132,8 @@ public class CollectionService {
         }
     }
 
-    public double lecheTotal(List<CollectionEntity> acopios){
+    public double lecheTotal(String code){
+        List<CollectionEntity> acopios = obtenerAcopiosCodigo(code);
         double totalLeche = 0.0;
         for (CollectionEntity acopio : acopios) {
             totalLeche = totalLeche + acopio.getMilk();
@@ -135,7 +141,8 @@ public class CollectionService {
         return totalLeche;
     }
 
-    public String obtenerQuincena(List<CollectionEntity> acopiosDB){
+    public String obtenerQuincena(){
+        List<CollectionEntity> acopiosDB = obtenerAcopios();
         if (!acopiosDB.isEmpty()){
             if (Integer.parseInt(acopiosDB.get(0).getDate().split("/")[2]) <= 15) {
                 return acopiosDB.get(0).getDate().split("/")[0] + "/" + acopiosDB.get(0).getDate().split("/")[1] + "/" + "01";
@@ -151,30 +158,8 @@ public class CollectionService {
         return (double) Math.abs(Math.round((lecheTotal / 15.0) * 100d)) / 100d;
     }
 
-    public double diasEntregaTotal(List<CollectionEntity> acopios){
+    public double diasEntregaTotal(String code) {
+        List<CollectionEntity> acopios = obtenerAcopiosCodigo(code);
         return acopios.size();
-    }
-
-    public String obtenerCodigo(CollectionEntity acopio){
-        return acopio.getCode();
-    }
-
-    public double obtenerLeche(CollectionEntity acopio){
-        return acopio.getMilk();
-    }
-
-    public String obtenerFecha(CollectionEntity acopio){
-        return acopio.getDate();
-    }
-
-    public String obtenerTurno(CollectionEntity acopio){
-        return acopio.getShift();
-    }
-
-    public void eliminarAcopio(CollectionEntity acopio) {
-        try{
-            collectionRepository.deleteById(acopio.getId());
-        }catch(Exception ignored){
-        }
     }
 }

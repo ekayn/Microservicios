@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 public class GreaseAndSolidService {
@@ -27,8 +28,14 @@ public class GreaseAndSolidService {
     @Autowired
     RestTemplate restTemplate;
 
-    public void actualizarRegistros(){
-        restTemplate.postForObject("http://Register-Service/registros/actualizar-grasas-solidos", null, Void.class);
+    public void restablecerRegistros(){
+        restTemplate.postForObject("http://Register-Service/registros/restablecer-grasas-solidos", null, Void.class);
+        List<GreaseAndSolidEntity> grasasSolidos = obtenerGrasasYSolidos();
+        for (GreaseAndSolidEntity grasaSolido : grasasSolidos){
+            restTemplate.postForObject("http://Register-Service/registros/guardar-grasa-solido/" + grasaSolido.getCode() + "/" +
+                    grasaSolido.getGrease() + "/" +
+                    grasaSolido.getSolid(), null, Void.class);
+        }
     }
 
     public ArrayList<GreaseAndSolidEntity> obtenerGrasasYSolidos(){
@@ -83,7 +90,6 @@ public class GreaseAndSolidService {
     @Generated
     public void cargarCsv(String direccion){
         BufferedReader bf = null;
-        //greaseAndSolidRepository.deleteAll();
         try{
             bf = new BufferedReader(new FileReader(direccion));
             String bfRead;
@@ -138,28 +144,6 @@ public class GreaseAndSolidService {
             return 95.0;
         } else {
             return 150.0;
-        }
-    }
-
-    public String obtenerCodigo(String code){
-        GreaseAndSolidEntity grasaSolido = obtenerGrasasSolidosCodigo(code);
-        return grasaSolido.getCode();
-    }
-
-    public double obtenerGrasa(String code){
-        GreaseAndSolidEntity grasaSolido = obtenerGrasasSolidosCodigo(code);
-        return grasaSolido.getGrease();
-    }
-
-    public double obtenerSolido(String code){
-        GreaseAndSolidEntity grasaSolido = obtenerGrasasSolidosCodigo(code);
-        return grasaSolido.getSolid();
-    }
-
-    public void eliminarGrasaSolido(GreaseAndSolidEntity grasaSolido) {
-        try{
-            greaseAndSolidRepository.deleteById(grasaSolido.getCode());
-        }catch(Exception ignored){
         }
     }
 }

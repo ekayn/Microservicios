@@ -56,35 +56,13 @@ public class SupplierService {
         };
     }
 
-    public double pagoRetencion(String retention){
-        if (retention.equals("Si")){
+    public double pagoRetencion(String retention) {
+        if (retention.equals("Si")) {
             return 0.13;
-        } else if (retention.equals("No")){
+        } else if (retention.equals("No")) {
             return 0.0;
-        } else{
+        } else {
             return 0.0;
-        }
-    }
-    public String obtenerCodigo(SupplierEntity proveedor) {
-        return proveedor.getCode();
-    }
-
-    public String obtenerNombre(SupplierEntity proveedor) {
-        return proveedor.getName();
-    }
-
-    public String obtenerCategoria(SupplierEntity proveedor) {
-        return proveedor.getCategory();
-    }
-
-    public String obtenerRetencion(SupplierEntity proveedor) {
-        return proveedor.getRetention();
-    }
-
-    public void eliminarProveedor(String id) {
-        try{
-            supplierRepository.deleteById(id);
-        }catch(Exception ignore){
         }
     }
 }

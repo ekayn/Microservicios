@@ -1,15 +1,13 @@
 package com.usach.registerservice.services;
 
 import com.usach.registerservice.entities.RegisterEntity;
-import com.usach.registerservice.models.CollectionModel;
-import com.usach.registerservice.models.GreaseAndSolidModel;
 import com.usach.registerservice.repositories.RegisterRepository;
-import lombok.Generated;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Service
@@ -17,8 +15,7 @@ public class RegisterService {
     @Autowired
     RegisterRepository registerRepository;
 
-    @Autowired
-    RestTemplate restTemplate;
+    private final Logger logg = LoggerFactory.getLogger(RegisterService.class);
 
     public List<RegisterEntity> obtenerRegistros(){
         return registerRepository.findAll();
@@ -28,27 +25,30 @@ public class RegisterService {
         return registerRepository.getReferenceById(code);
     }
 
-    @Generated
-    public void actualizarRegistrosLeche(){
-        for (RegisterEntity registro : registerRepository.findAll()){
+    public void restablecerLeche(){
+        List<RegisterEntity> registros = registerRepository.findAll();
+        for (RegisterEntity registro : registros){
             registro.setMilk(0.0);
-        }
-        List<CollectionModel> acopios = restTemplate.getForObject("http://Collection-Service/acopios", List.class);
-
-        for (CollectionModel acopio : acopios){
-            String code = restTemplate.getForObject("http://Collection-Service/acopios/" + acopio, String.class);
-            Double leche = restTemplate.getForObject("http://Collection-Service/acopios/obtener-leche" + acopio, Double.class);
-            RegisterEntity registro = registerRepository.getReferenceById(code);
-            registro.setMilk(leche + registro.getMilk());
         }
     }
 
-    @Generated
-    public void actualizarRegistrosGrasasSolidos(){
-        for (RegisterEntity registro : registerRepository.findAll()){
-            registro.setGrease(restTemplate.getForObject("http://GreaseAndSolid-Service/grasas-solidos/obtener-grasa" + restTemplate.getForObject("http://GreaseAndSolid-Service/grasas-solidos/" + registro.getCode(), GreaseAndSolidModel.class), Double.class));
-            registro.setSolid(restTemplate.getForObject("http://GreaseAndSolid-Service/grasas-solidos/obtener-solido" + restTemplate.getForObject("http://GreaseAndSolid-Service/grasas-solidos/" + registro.getCode(), GreaseAndSolidModel.class), Double.class));
+    public void guardarLeche(String code, Double valor){
+        RegisterEntity registro = obtenerRegistroCodigo(code);
+        registro.setMilk(registro.getMilk() + valor);
+    }
+
+    public void restablecerGrasasSolidos(){
+        List<RegisterEntity> registros = registerRepository.findAll();
+        for (RegisterEntity registro : registros){
+            registro.setGrease(0.0);
+            registro.setSolid(0.0);
         }
+    }
+
+    public void guardarGrasaSolido(String code, Double valorGrasa, Double valorSolido){
+        RegisterEntity registro = obtenerRegistroCodigo(code);
+        registro.setGrease(registro.getGrease() + valorGrasa);
+        registro.setSolid(registro.getSolid() + valorSolido);
     }
 
     public void guardarRegistro(String registerCode){
@@ -138,29 +138,6 @@ public class RegisterService {
             return 0.18;
         } else{
             return 0.0;
-        }
-    }
-
-    public double obtenerLeche(RegisterEntity registro){
-        return registro.getMilk();
-    }
-
-    public String obtenerCodigo(RegisterEntity registro){
-        return registro.getCode();
-    }
-
-    public double obtenerGrasa(RegisterEntity registro){
-        return registro.getGrease();
-    }
-
-    public double obtenerSolido(RegisterEntity registro){
-        return registro.getSolid();
-    }
-
-    public void eliminarRegistro(String id) {
-        try{
-            registerRepository.deleteById(id);
-        }catch(Exception ignore){
         }
     }
 }
