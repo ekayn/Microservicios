@@ -44,13 +44,15 @@ public class RegisterService {
         for (RegisterEntity registro : registros){
             registro.setGrease(0.0);
             registro.setSolid(0.0);
+            registerRepository.save(registro);
         }
     }
 
     public void guardarGrasaSolido(String code, Double valorGrasa, Double valorSolido){
         RegisterEntity registro = obtenerRegistroCodigo(code);
-        registro.setGrease(registro.getGrease() + valorGrasa);
-        registro.setSolid(registro.getSolid() + valorSolido);
+        registro.setGrease(valorGrasa);
+        registro.setSolid(valorSolido);
+        registerRepository.save(registro);
     }
 
     public void guardarRegistro(String registerCode){

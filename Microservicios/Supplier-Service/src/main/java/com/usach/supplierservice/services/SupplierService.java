@@ -17,8 +17,8 @@ public class SupplierService {
     @Autowired
     RestTemplate restTemplate;
 
-    public void ingresarRegistroCodigo(String supplierCode){
-        restTemplate.postForObject("http://Register-Service/registros/" + supplierCode, null, Void.class);
+    public void ingresarRegistroCodigo(SupplierEntity proveedor){
+        restTemplate.postForObject("http://Register-Service/registros/guardar/" + proveedor.getCode(), null, Void.class);
     }
 
     public ArrayList<SupplierEntity> obtenerProveedores(){
@@ -37,12 +37,7 @@ public class SupplierService {
         return supplierRepository.getReferenceById(code);
     }
 
-    public void guardarProveedor(String supplierName, String supplierCode, String supplierCategory, String supplierRetention){
-        SupplierEntity proveedor = new SupplierEntity();
-        proveedor.setName(supplierName);
-        proveedor.setCode(supplierCode);
-        proveedor.setCategory(supplierCategory);
-        proveedor.setRetention(supplierRetention);
+    public void guardarProveedor(SupplierEntity proveedor){
         supplierRepository.save(proveedor);
     }
 

@@ -13,10 +13,11 @@ function NavbarComponent(){
                 </nav>
                 <a class="btn" href="/"><button>Menú principal</button></a>
                 <a class="btn-2" href="/listar-proveedores"><button>Proveedores</button></a>
+                <a class="btn-2" href="/agregar-proveedor"><button>Agregar Proveedor</button></a>
                 <a class="btn-2" href="/listar-acopios"><button>Acopios</button></a>
                 <a class="btn-2" href="/listar-grasas-solidos"><button>Grasas y solidos</button></a>
-                <a class="btn-2" href="/listar-registros"><button>Registros anteriores</button></a>
-                <a class="btn-2" href="/listar-pagos-1"><button>Pagos</button></a>
+                <a class="btn-2" href="/listar-registros"><button>Registros</button></a>
+                <a class="btn-2" href="/listar-pagos"><button>Pagos</button></a>
             </header>
             </NavStyle>
         </>

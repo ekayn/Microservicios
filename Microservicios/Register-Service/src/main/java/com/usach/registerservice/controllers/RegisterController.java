@@ -33,7 +33,7 @@ public class RegisterController {
         registerService.restablecerGrasasSolidos();
     }
 
-    @PostMapping("/guardar-grasas-solidos/{code}/{valorGrasa}/{valorSolido}")
+    @PostMapping("/guardar-grasa-solido/{code}/{valorGrasa}/{valorSolido}")
     public void guardarGrasasSolidos(@PathVariable("code") String code, @PathVariable("valorGrasa") Double valorGrasa, @PathVariable("valorSolido") Double valorSolido){
         registerService.guardarGrasaSolido(code, valorGrasa, valorSolido);
     }

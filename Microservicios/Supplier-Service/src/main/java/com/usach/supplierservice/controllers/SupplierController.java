@@ -53,18 +53,10 @@ public class SupplierController{
         return ResponseEntity.ok(pago);
     }
 
-    @PostMapping("/{supplierCode}/{supplierName}/{supplierCategory}/{supplierRetention}")
-    public ResponseEntity<String> guardarProveedor(@PathVariable("supplierCode") String supplierCode,
-                                                           @PathVariable("supplierName") String supplierName,
-                                                           @PathVariable("supplierCategory") String supplierCategory,
-                                                           @PathVariable("supplierRetention") String supplierRetention) {
-        if (supplierService.existeProveedorPorCodigo(supplierCode)){
-            return ResponseEntity.ok("Codigo del roveedor ya existente");
-        } else if (supplierService.existeProveedorPorNombre(supplierName)){
-            return ResponseEntity.ok("Nombre del roveedor ya existente");
-        }
-        supplierService.guardarProveedor(supplierName, supplierCode, supplierCategory, supplierRetention);
-        supplierService.ingresarRegistroCodigo(supplierCode);
-        return ResponseEntity.ok("Proveedor guardado con éxito");
+    @PostMapping
+    public ResponseEntity<SupplierEntity> guardarProveedor(@RequestBody SupplierEntity proveedor) {
+        supplierService.guardarProveedor(proveedor);
+        supplierService.ingresarRegistroCodigo(proveedor);
+        return ResponseEntity.ok(proveedor);
     }
 }

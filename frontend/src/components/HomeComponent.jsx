@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import NavbarComponent from "./NavbarComponent";
+import imagenes from "./assets/imagenes.js"
 
 export default function Home(){
     
@@ -8,6 +9,11 @@ export default function Home(){
         <div className="home">
             <HomeStyle>
                 <NavbarComponent />
+                <div class="box-area">
+                    <div class="single-box-img">
+                        <img className="d-block w-6000" src={imagenes.vaca} height="600" alt="banner 1"/>
+                    </div>
+                </div>
                 <div class="box-area">
                     <div class="single-box">
                         <a href="/subir-archivo-acopios">
@@ -58,6 +64,22 @@ const HomeStyle = styled.nav`
     transition: .3s
 }
 
+.single-box-img{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: auto;
+    border-radius: 4px;
+    background-color: #fff;
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+    transition: .3s
+}
+
 .img-area{
     display: flex;
     justify-content: center;
@@ -87,7 +109,7 @@ const HomeStyle = styled.nav`
     line-height: 30px;
 }
 .single-box:hover{
-    background: #e84393;
+    background: #3ADF00;
     color: #fff;}
 
 .single-box:nth-child(2) .img-area{
