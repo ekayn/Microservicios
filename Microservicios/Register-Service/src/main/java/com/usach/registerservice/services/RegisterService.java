@@ -29,12 +29,14 @@ public class RegisterService {
         List<RegisterEntity> registros = registerRepository.findAll();
         for (RegisterEntity registro : registros){
             registro.setMilk(0.0);
+            registerRepository.save(registro);
         }
     }
 
     public void guardarLeche(String code, Double valor){
         RegisterEntity registro = obtenerRegistroCodigo(code);
         registro.setMilk(registro.getMilk() + valor);
+        registerRepository.save(registro);
     }
 
     public void restablecerGrasasSolidos(){

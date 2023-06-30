@@ -33,7 +33,9 @@ public class CollectionService {
         restTemplate.postForObject("http://Register-Service/registros/restablecer-leche", null, Void.class);
         List<CollectionEntity> acopios = obtenerAcopios();
         for (CollectionEntity acopio : acopios){
-            restTemplate.postForObject("http://Register-Service/registros/guardar-leche/" + acopio.getCode() + "/" + acopio.getMilk(), null, Void.class);
+            String code = acopio.getCode();
+            Double leche = acopio.getMilk();
+            restTemplate.postForObject("http://Register-Service/registros/guardar-leche/" + code + "/" + leche, null, Void.class);
         }
     }
 
