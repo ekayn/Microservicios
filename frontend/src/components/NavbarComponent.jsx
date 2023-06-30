@@ -18,6 +18,7 @@ function NavbarComponent(){
                 <a class="btn-2" href="/listar-grasas-solidos"><button>Grasas y solidos</button></a>
                 <a class="btn-2" href="/listar-registros"><button>Registros</button></a>
                 <a class="btn-2" href="/listar-pagos"><button>Pagos</button></a>
+                <a class="btn-2" href="/agregar-pago"><button>Agregar pago</button></a>
             </header>
             </NavStyle>
         </>

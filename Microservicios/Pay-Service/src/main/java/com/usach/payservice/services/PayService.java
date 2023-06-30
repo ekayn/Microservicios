@@ -128,30 +128,30 @@ public class PayService {
 
         pago.setCode(code);
 
-        String categoria = restTemplate.getForObject("http://Supplier-Service/proveedores/obtener-categoria/" + code, String.class);
-        String retencion = restTemplate.getForObject("http://Supplier-Service/proveedores/obtener-retencion/" + code, String.class);
-        String nombre = restTemplate.getForObject("http://Supplier-Service/proveedores/obtener-nombre/" + code, String.class);
+        String categoria = proveedor.getCategory();
+        String retencion = proveedor.getRetention();
+        String nombre = proveedor.getName();
 
         pago.setDate(quincena);
         pago.setCategory(categoria);
         pago.setName(nombre);
 
-        Double lecheRegistro = restTemplate.getForObject("http://Register-Service/registros/obtener-leche", Double.class, registro);
+        Double lecheRegistro = registro.getMilk();
         Double lecheVariacion = restTemplate.getForObject("http://Register-Service/registros/variacion-leche", Double.class, lecheRegistro, lecheTotal);
         pago.setMilk(lecheTotal);
         pago.setMilkDays(diasEntregas);
         pago.setMilkAverage(lechePromedio);
         pago.setMilkChanged(lecheVariacion);
 
-        Double grasa = restTemplate.getForObject("http://GreaseAndSolid-Service/grasas-solidos/obtener-grasa/" + code, Double.class);
-        Double grasaRegistro = restTemplate.getForObject("http://Register-Service/registros/obtener-grasa", Double.class, registro);
-        Double grasaVariacion = restTemplate.getForObject("http://Register-Service/registros/variacion-grasa", Double.class, grasaRegistro, grasa);
+        Double grasa = grasaSolido.getGrease();
+        Double grasaRegistro = registro.getGrease();
+        Double grasaVariacion = restTemplate.getForObject("http://Register-Service/registros/variacion-grasa/" + grasaRegistro + "/" + grasa, Double.class);
         pago.setGrease(grasa);
         pago.setGreaseChanged(grasaVariacion);
 
-        Double solido = restTemplate.getForObject("http://GreaseAndSolid-Service/grasas-solidos/obtener-solido/" + code, Double.class);
-        Double solidoRegistro = restTemplate.getForObject("http://Register-Service/registros/obtener-solido", Double.class, registro);
-        Double solidoVariacion = restTemplate.getForObject("http://Register-Service/registros/variacion-solido", Double.class, solidoRegistro, solido);
+        Double solido = grasaSolido.getSolid();
+        Double solidoRegistro = registro.getSolid();
+        Double solidoVariacion = restTemplate.getForObject("http://Register-Service/registros/variacion-solido/" + solidoRegistro + "/" +  solido, Double.class);
         pago.setSolid(solido);
         pago.setSolidChanged(solidoVariacion);
 
