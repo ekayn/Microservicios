@@ -23,7 +23,7 @@ class GreaseAndSolidListComponent extends Component{
                 <Styles>
                 <h1 className="text-center"> <b>Listado de grasas y solidos</b></h1>    
                     <div className="f">
-                    <table border="1" class="content-table">
+                    <table border="1" className="content-table">
                         <thead>
                             <tr>
                                 <th>Código</th>

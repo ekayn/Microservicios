@@ -23,7 +23,7 @@ class PayListComponent extends Component{
                 <Styles>
                 <h1 className="text-center"> <b>Listado de pagos</b></h1>    
                     <div className="f">
-                    <table border="1" class="content-table">
+                    <table border="1" className="content-table">
                         <thead>
                             <tr>
                                 <th>Código</th>
@@ -37,7 +37,6 @@ class PayListComponent extends Component{
                                 <th>Variación % leche</th>
                                 <th>Variación % grasa</th>
                                 <th>Variacón % solidos</th>
-
                                 <th>Pago Leche</th>
                                 <th>Pago grasa</th>
                                 <th>Pago solido</th>
@@ -53,7 +52,6 @@ class PayListComponent extends Component{
                         <tbody>
                             {this.state.pagos.map((pago) => (
                                 <tr key={pago.code}>
-
                                     <td>{pago.code}</td>
                                     <td>{pago.date}</td>
                                     <td>{pago.name}</td>
@@ -65,7 +63,6 @@ class PayListComponent extends Component{
                                     <td>{pago.milkChanged}</td>
                                     <td>{pago.greaseChanged}</td>
                                     <td>{pago.solidChanged}</td>
-
                                     <td>{pago.milkPay}</td>
                                     <td>{pago.greasePay}</td>
                                     <td>{pago.solidPay}</td>

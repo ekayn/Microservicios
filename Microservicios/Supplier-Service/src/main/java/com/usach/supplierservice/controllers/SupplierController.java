@@ -35,9 +35,6 @@ public class SupplierController{
     @GetMapping("/{code}")
     public ResponseEntity<SupplierEntity> obtenerProveedor(@PathVariable("code") String code){
         SupplierEntity proveedor = supplierService.obtenerProveedorCodigo(code);
-        if (proveedor == null){
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(proveedor);
     }
 
@@ -51,6 +48,24 @@ public class SupplierController{
     public ResponseEntity<Double> pagoRetencionCodigo(@PathVariable("rtc") String rtc){
         Double pago = supplierService.pagoRetencion(rtc);
         return ResponseEntity.ok(pago);
+    }
+
+    @GetMapping("/categoria/{code}")
+    public ResponseEntity<String> obtenerCategoria(@PathVariable("code") String code){
+        String categoria = supplierService.obtenerCategoria(code);
+        return ResponseEntity.ok(categoria);
+    }
+
+    @GetMapping("/retencion/{code}")
+    public ResponseEntity<String> obtenerRetencion(@PathVariable("code") String code){
+        String retencion = supplierService.obtenerRetencion(code);
+        return ResponseEntity.ok(retencion);
+    }
+
+    @GetMapping("/nombre/{code}")
+    public ResponseEntity<String> obtenerNombre(@PathVariable("code") String code){
+        String nombre = supplierService.obtenerNombre(code);
+        return ResponseEntity.ok(nombre);
     }
 
     @PostMapping

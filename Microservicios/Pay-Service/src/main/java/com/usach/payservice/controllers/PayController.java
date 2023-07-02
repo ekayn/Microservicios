@@ -28,15 +28,11 @@ public class PayController {
     }
 
     @PostMapping("/{code}")
-    public ResponseEntity<String> crearPago(@PathVariable("code") String code) {
+    public void crearPago(@PathVariable("code") String code) {
         if (payService.existeProveedor(code)){
-            if (payService.existeGrasaSolido(code)){
+            if (payService.existeGrasaSolido(code)) {
                 payService.pagarPorId(code);
-                return ResponseEntity.ok("Pago generado con éxito");
-            } else{
-                return ResponseEntity.ok("El código ingresado no posee registros de grasas y solidos");
             }
         }
-        return ResponseEntity.ok("El código ingresado no existe");
     }
 }

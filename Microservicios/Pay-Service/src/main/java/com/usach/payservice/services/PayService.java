@@ -40,9 +40,6 @@ public class PayService {
         if (greasePay < 0.0){
             grease = 0.0;
         }
-        if (solidPay < 0.0){
-            solid = 0.0;
-        }
         if (frecuencyBonification < 0.0){
             frecuency = 0.0;
         }
@@ -108,7 +105,7 @@ public class PayService {
     }
 
     public PayEntity obtenerPagoCodigo(String code){
-        return payRepository.getReferenceById(code);
+        return payRepository.findByCode(code);
     }
 
     @Generated
@@ -124,33 +121,34 @@ public class PayService {
         Double lechePromedio = restTemplate.getForObject("http://Collection-Service/acopios/leche-promedio/" + lecheTotal, Double.class);
         Double diasEntregas = restTemplate.getForObject("http://Collection-Service/acopios/dias-entregas/" + code, Double.class);
 
+
         PayEntity pago = new PayEntity();
 
         pago.setCode(code);
 
-        String categoria = proveedor.getCategory();
-        String retencion = proveedor.getRetention();
-        String nombre = proveedor.getName();
+        String categoria = restTemplate.getForObject("http://Supplier-Service/proveedores/categoria/" + code, String.class);
+        String retencion = restTemplate.getForObject("http://Supplier-Service/proveedores/retencion/" + code, String.class);
+        String nombre = restTemplate.getForObject("http://Supplier-Service/proveedores/nombre/" + code, String.class);
 
         pago.setDate(quincena);
         pago.setCategory(categoria);
         pago.setName(nombre);
 
-        Double lecheRegistro = registro.getMilk();
-        Double lecheVariacion = restTemplate.getForObject("http://Register-Service/registros/variacion-leche", Double.class, lecheRegistro, lecheTotal);
+        Double lecheRegistro = restTemplate.getForObject("http://Register-Service/registros/leche/" + code, Double.class);
+        Double lecheVariacion = restTemplate.getForObject("http://Register-Service/registros/variacion-leche/" + lecheRegistro + "/" + lecheTotal, Double.class);
         pago.setMilk(lecheTotal);
         pago.setMilkDays(diasEntregas);
         pago.setMilkAverage(lechePromedio);
         pago.setMilkChanged(lecheVariacion);
 
-        Double grasa = grasaSolido.getGrease();
-        Double grasaRegistro = registro.getGrease();
+        Double grasa = restTemplate.getForObject("http://GreaseAndSolid-Service/grasas-solidos/grasa/" + code, Double.class);
+        Double grasaRegistro = restTemplate.getForObject("http://Register-Service/registros/grasa/" + code, Double.class);
         Double grasaVariacion = restTemplate.getForObject("http://Register-Service/registros/variacion-grasa/" + grasaRegistro + "/" + grasa, Double.class);
         pago.setGrease(grasa);
         pago.setGreaseChanged(grasaVariacion);
 
-        Double solido = grasaSolido.getSolid();
-        Double solidoRegistro = registro.getSolid();
+        Double solido = restTemplate.getForObject("http://GreaseAndSolid-Service/grasas-solidos/solido/" + code, Double.class);
+        Double solidoRegistro = restTemplate.getForObject("http://Register-Service/registros/solido/" + code, Double.class);
         Double solidoVariacion = restTemplate.getForObject("http://Register-Service/registros/variacion-solido/" + solidoRegistro + "/" +  solido, Double.class);
         pago.setSolid(solido);
         pago.setSolidChanged(solidoVariacion);
@@ -165,9 +163,9 @@ public class PayService {
         pago.setGreasePay(pagoGrasa * lecheTotal);
         pago.setSolidPay(pagoSolido * lecheTotal);
 
-        Double descuentoLeche = restTemplate.getForObject("http://Register-Service/registros/descuento-leche", Double.class, pago.getMilkChanged());
-        Double descuentoGrasa = restTemplate.getForObject("http://Register-Service/registros/descuento-grasa", Double.class, pago.getGreaseChanged());
-        Double descuentoSolido = restTemplate.getForObject("http://Register-Service/registros/descuento-solido", Double.class, pago.getSolidChanged());
+        Double descuentoLeche = restTemplate.getForObject("http://Register-Service/registros/descuento-leche/" + pago.getMilkChanged(), Double.class);
+        Double descuentoGrasa = restTemplate.getForObject("http://Register-Service/registros/descuento-grasa/" + pago.getGreaseChanged(), Double.class);
+        Double descuentoSolido = restTemplate.getForObject("http://Register-Service/registros/descuento-solido/" + pago.getSolidChanged(), Double.class);
 
         pago.setFrecuencyBonification(bonificacionFrecuencia * pago.getMilkPay());
         pago.setMilkDiscount(descuentoLeche * pago.getMilkPay());

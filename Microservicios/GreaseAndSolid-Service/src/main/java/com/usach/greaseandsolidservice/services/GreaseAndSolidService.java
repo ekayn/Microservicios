@@ -66,7 +66,7 @@ public class GreaseAndSolidService {
     }
 
     public GreaseAndSolidEntity obtenerGrasasSolidosCodigo(String code){
-        return greaseAndSolidRepository.getReferenceById(code);
+        return greaseAndSolidRepository.findByCode(code);
     }
 
     private final Logger logg = LoggerFactory.getLogger(GreaseAndSolidService.class);
@@ -145,5 +145,15 @@ public class GreaseAndSolidService {
         } else {
             return 150.0;
         }
+    }
+
+    public Double obtenerGrasa(String code) {
+        GreaseAndSolidEntity grasaSolido = obtenerGrasasSolidosCodigo(code);
+        return grasaSolido.getGrease();
+    }
+
+    public Double obtenerSolido(String code) {
+        GreaseAndSolidEntity grasaSolido = obtenerGrasasSolidosCodigo(code);
+        return grasaSolido.getSolid();
     }
 }

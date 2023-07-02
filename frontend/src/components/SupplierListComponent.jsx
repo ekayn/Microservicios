@@ -23,7 +23,7 @@ class SupplierListComponent extends Component{
                 <Styles>
                 <h1 className="text-center"> <b>Listado de proveedores</b></h1>
                     <div className="f">
-                    <table border="1" class="content-table">
+                    <table border="1" className="content-table">
                         <thead>
                             <tr>
                                 <th>Código</th>

@@ -9,13 +9,7 @@ import RegisterListComponent from './components/RegisterListComponent';
 import SupplierAddComponent from './components/SupplierAddComponent';
 import SupplierListComponent from './components/SupplierListComponent';
 import PayListComponent from './components/PayListComponent';
-
-/*
 import PayAddComponent from './components/PayAddComponent';
-
-
-          <Route path= "/pagar" element={<PayAddComponent />} />
-*/
 
 function App() {
   return (
@@ -30,12 +24,8 @@ function App() {
           <Route path= "/listar-registros" element={<RegisterListComponent />} />
           <Route path= "/agregar-proveedor" element={<SupplierAddComponent />} />
           <Route path= "/listar-proveedores" element={<SupplierListComponent />} />
-          <Route path= "/listar-pagos" element={<PayList1Component />} />
-
-
-                            
-          
-          
+          <Route path= "/listar-pagos" element={<PayListComponent />} />
+          <Route path= "/agregar-pago" element={<PayAddComponent />} />                 
         </Routes>
       </BrowserRouter>
     </div>

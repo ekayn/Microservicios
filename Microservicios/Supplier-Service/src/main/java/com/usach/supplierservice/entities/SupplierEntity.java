@@ -13,7 +13,7 @@ import jakarta.persistence.*;
 @Table(name = "suppliers")
 public class SupplierEntity {
     @Id
-    @Column(nullable=false, length = 5)
+    @Column(nullable=false)
     private String code;
     private String name;
     private String category;

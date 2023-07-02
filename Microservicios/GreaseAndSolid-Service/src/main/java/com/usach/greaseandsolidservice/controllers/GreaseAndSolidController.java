@@ -70,4 +70,15 @@ public class GreaseAndSolidController {
                 greaseAndSolidService.guardarGrasaYSolido(codigo, grasa, solido);
     }
 
+    @GetMapping("/grasa/{code}")
+    public ResponseEntity<Double> obtenerGrasa(@PathVariable("code") String code){
+        Double grasa = greaseAndSolidService.obtenerGrasa(code);
+        return ResponseEntity.ok(grasa);
+    }
+
+    @GetMapping("/solido/{code}")
+    public ResponseEntity<Double> obtenerSolido(@PathVariable("code") String code){
+        Double solido = greaseAndSolidService.obtenerSolido(code);
+        return ResponseEntity.ok(solido);
+    }
 }

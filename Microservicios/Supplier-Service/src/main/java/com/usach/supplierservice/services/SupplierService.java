@@ -34,7 +34,7 @@ public class SupplierService {
     }
 
     public SupplierEntity obtenerProveedorCodigo(String code){
-        return supplierRepository.getReferenceById(code);
+        return supplierRepository.findByCode(code);
     }
 
     public void guardarProveedor(SupplierEntity proveedor){
@@ -59,5 +59,21 @@ public class SupplierService {
         } else {
             return 0.0;
         }
+    }
+
+
+    public String obtenerCategoria(String code){
+        SupplierEntity proveedor = obtenerProveedorCodigo(code);
+        return proveedor.getCategory();
+    }
+
+    public String obtenerRetencion(String code){
+        SupplierEntity proveedor = obtenerProveedorCodigo(code);
+        return proveedor.getRetention();
+    }
+
+    public String obtenerNombre(String code){
+        SupplierEntity proveedor = obtenerProveedorCodigo(code);
+        return proveedor.getName();
     }
 }

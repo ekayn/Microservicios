@@ -22,7 +22,7 @@ public class RegisterService {
     }
 
     public RegisterEntity obtenerRegistroCodigo(String code){
-        return registerRepository.getReferenceById(code);
+        return registerRepository.findByCode(code);
     }
 
     public void restablecerLeche(){
@@ -143,5 +143,20 @@ public class RegisterService {
         } else{
             return 0.0;
         }
+    }
+
+    public Double obtenerGrasa(String code) {
+        RegisterEntity registro = obtenerRegistroCodigo(code);
+        return registro.getGrease();
+    }
+
+    public Double obtenerSolido(String code) {
+        RegisterEntity registro = obtenerRegistroCodigo(code);
+        return registro.getSolid();
+    }
+
+    public Double obtenerLeche(String code) {
+        RegisterEntity registro = obtenerRegistroCodigo(code);
+        return registro.getMilk();
     }
 }

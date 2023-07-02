@@ -92,4 +92,22 @@ public class RegisterController {
         Double descuento = registerService.descuentoSolido(valor);
         return ResponseEntity.ok(descuento);
     }
+
+    @GetMapping("/grasa/{code}")
+    public ResponseEntity<Double> obtenerGrasa(@PathVariable("code") String code){
+        Double grasa = registerService.obtenerGrasa(code);
+        return ResponseEntity.ok(grasa);
+    }
+
+    @GetMapping("/solido/{code}")
+    public ResponseEntity<Double> obtenerSolido(@PathVariable("code") String code){
+        Double solido = registerService.obtenerSolido(code);
+        return ResponseEntity.ok(solido);
+    }
+
+    @GetMapping("/leche/{code}")
+    public ResponseEntity<Double> obtenerLeche(@PathVariable("code") String code){
+        Double leche = registerService.obtenerLeche(code);
+        return ResponseEntity.ok(leche);
+    }
 }
